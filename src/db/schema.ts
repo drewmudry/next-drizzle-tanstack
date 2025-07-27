@@ -1,4 +1,4 @@
-import { pgTable, serial, text, varchar, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
+import { pgTable, serial, text, varchar, timestamp, boolean, integer, foreignKey, AnyPgColumn } from 'drizzle-orm/pg-core';
 
 // Better Auth tables
 export const user = pgTable("user", {
@@ -18,7 +18,18 @@ export const user = pgTable("user", {
   twoFactorEnabled: boolean("two_factor_enabled"),
   username: text("username").unique(),
   displayUsername: text("display_username"),
-});
+  // Referral and Stripe Connect fields
+  referrerId: text("referrer_id"),
+  referralCode: text("referral_code").unique(),
+  stripeAccountId: text("stripe_account_id"),
+  isStripeConnected: boolean("is_stripe_connected").$defaultFn(() => false).notNull(),
+}, (table) => [
+  foreignKey({
+    columns: [table.referrerId],
+    foreignColumns: [table.id],
+    name: "user_referrer_id_fkey"
+  })
+]);
 
 export const session = pgTable("session", {
   id: text("id").primaryKey(),

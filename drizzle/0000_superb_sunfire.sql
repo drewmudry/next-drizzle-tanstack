@@ -44,8 +44,13 @@ CREATE TABLE "user" (
 	"two_factor_enabled" boolean,
 	"username" text,
 	"display_username" text,
+	"referrer_id" text,
+	"referral_code" text,
+	"stripe_account_id" text,
+	"is_stripe_connected" boolean NOT NULL,
 	CONSTRAINT "user_email_unique" UNIQUE("email"),
-	CONSTRAINT "user_username_unique" UNIQUE("username")
+	CONSTRAINT "user_username_unique" UNIQUE("username"),
+	CONSTRAINT "user_referral_code_unique" UNIQUE("referral_code")
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
@@ -68,4 +73,5 @@ CREATE TABLE "verification" (
 --> statement-breakpoint
 ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "two_factor" ADD CONSTRAINT "two_factor_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;
+ALTER TABLE "two_factor" ADD CONSTRAINT "two_factor_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "user" ADD CONSTRAINT "user_referrer_id_fkey" FOREIGN KEY ("referrer_id") REFERENCES "public"."user"("id") ON DELETE no action ON UPDATE no action;

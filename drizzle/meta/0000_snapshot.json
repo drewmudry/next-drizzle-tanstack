@@ -1,5 +1,5 @@
 {
-  "id": "2136bdad-bc81-47d9-a9b8-7c277b5ebf4d",
+  "id": "bbc10ba1-fae8-480b-951a-e53fb816be00",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -306,10 +306,48 @@
           "type": "text",
           "primaryKey": false,
           "notNull": false
+        },
+        "referrer_id": {
+          "name": "referrer_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "referral_code": {
+          "name": "referral_code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "stripe_account_id": {
+          "name": "stripe_account_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "is_stripe_connected": {
+          "name": "is_stripe_connected",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true
         }
       },
       "indexes": {},
-      "foreignKeys": {},
+      "foreignKeys": {
+        "user_referrer_id_fkey": {
+          "name": "user_referrer_id_fkey",
+          "tableFrom": "user",
+          "tableTo": "user",
+          "columnsFrom": [
+            "referrer_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
         "user_email_unique": {
@@ -324,6 +362,13 @@
           "nullsNotDistinct": false,
           "columns": [
             "username"
+          ]
+        },
+        "user_referral_code_unique": {
+          "name": "user_referral_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "referral_code"
           ]
         }
       },
